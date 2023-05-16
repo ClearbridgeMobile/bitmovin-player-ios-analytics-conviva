@@ -495,9 +495,23 @@ extension ConvivaAnalytics: BitmovinPlayerListenerDelegate {
 
     // MARK: - Ad events
     func onAdStarted(_ event: AdStartedEvent) {
-        let adPosition: AdPosition = AdEventUtil.parseAdPosition(event: event, contentDuration: player.duration)
+        let adPosition: AdPosition = AdEventUtil.parseNESNAdPosition(event: event, contentDuration: player.duration)
+        
         var adAttributes = [String: Any]()
-        adAttributes["c3.ad.position"] = adPosition.rawValue
+        adAttributes["c3.ad.id"] = event.ad.identifier
+        adAttributes["c3.ad.system"] = "SpringServe"
+        adAttributes["c3.ad.position"] = adPosition
+        adAttributes["c3.ad.isSlate"] = "false"
+        adAttributes["c3.ad.mediaFileApiFramework"] = "NA"
+        adAttributes["c3.ad.adStitcher"] = "NA"
+        
+        adAttributes["c3.ad.firstAdId"] = event.ad.identifier
+        adAttributes["c3.ad.firstAdSystem"] = "SpringServe"
+        
+        adAttributes["c3.ad.firstCreativeId"] = event.ad.identifier
+        
+        adAttributes["c3.ad.creativeId"] = "NA"
+   
         videoAnalytics.reportAdBreakStarted(AdPlayer.ADPLAYER_CONTENT,
                                             adType: AdTechnology.CLIENT_SIDE, adBreakInfo: adAttributes)
     }

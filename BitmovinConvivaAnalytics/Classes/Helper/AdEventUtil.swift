@@ -73,3 +73,36 @@ final class AdEventUtil {
         }
     }
 }
+
+extension AdPosition {
+    static func parseNESNAdPosition(event: AdStartedEvent, contentDuration: TimeInterval) -> AdPosition {
+        guard let position = event.position else {
+            return "Pre-roll"
+        }
+
+        if position.range(of: positionRegexPattern, options: .regularExpression, range: nil, locale: nil) == nil {
+            return "Pre-roll" // return PreRoll if position is invalid
+        }
+
+        if position.contains("%") {
+            return parsePercentage(position: position)
+        }
+
+        if position.contains(":") {
+            return parseTime(position: position, contentDuration)
+        }
+
+        return parseStringNESNPosition(position: position)
+    }
+    
+    private static func parseStringNESNPosition(position: String) -> String {
+        switch position {
+        case "pre":
+            return "Pre-roll"
+        case "post":
+            return "Post-roll"
+        default:
+            return "Mid-roll"
+        }
+    }
+}
