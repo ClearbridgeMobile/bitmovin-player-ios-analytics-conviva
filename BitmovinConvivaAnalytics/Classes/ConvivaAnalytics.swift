@@ -495,7 +495,7 @@ extension ConvivaAnalytics: BitmovinPlayerListenerDelegate {
 
     // MARK: - Ad events
     func onAdStarted(_ event: AdStartedEvent) {
-        let adPosition: AdPosition = AdEventUtil.parseNESNAdPosition(event: event, contentDuration: player.duration)
+        let adPosition: String = AdEventUtil.parseNESNAdPosition(event: event, contentDuration: player.duration)
         
         var adAttributes = [String: Any]()
         adAttributes["c3.ad.id"] = event.ad.identifier

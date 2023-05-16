@@ -74,7 +74,7 @@ final class AdEventUtil {
     }
 }
 
-extension AdPosition {
+extension AdEventUtil {
     static func parseNESNAdPosition(event: AdStartedEvent, contentDuration: TimeInterval) -> String {
         guard let position = event.position else {
             return "Pre-roll"
