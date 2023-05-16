@@ -75,7 +75,7 @@ final class AdEventUtil {
 }
 
 extension AdPosition {
-    static func parseNESNAdPosition(event: AdStartedEvent, contentDuration: TimeInterval) -> AdPosition {
+    static func parseNESNAdPosition(event: AdStartedEvent, contentDuration: TimeInterval) -> String {
         guard let position = event.position else {
             return "Pre-roll"
         }
@@ -85,14 +85,43 @@ extension AdPosition {
         }
 
         if position.contains("%") {
-            return parsePercentage(position: position)
+            return parseNESNPercentage(position: position)
         }
 
         if position.contains(":") {
-            return parseTime(position: position, contentDuration)
+            return parseNESNTime(position: position, contentDuration)
         }
 
         return parseStringNESNPosition(position: position)
+    }
+    
+    private static func parseNESNPercentage(position: String) -> String {
+        let position = position.replacingOccurrences(of: "%", with: "")
+        let percentageValue = Double(position)
+        if percentageValue == 0 {
+            return "Pre-roll"
+        } else if percentageValue == 100 {
+            return "Post-roll"
+        } else {
+            return "Mid-roll"
+        }
+    }
+
+    private static func parseNESNTime(position: String, _ contentDuration: TimeInterval) -> String {
+        let stringParts = position.split(separator: ":")
+        var seconds = 0.0
+        let secondFactors: [Double] = [1, 60, 60 * 60, 60 * 60 * 24]
+        for (index, part) in stringParts.reversed().enumerated() {
+            seconds += (Double(part) ?? 0) * secondFactors[index]
+        }
+
+        if seconds == 0 {
+            return "Pre-roll"
+        } else if seconds == Double(contentDuration) {
+            return "Post-roll"
+        } else {
+            return "Mid-roll"
+        }
     }
     
     private static func parseStringNESNPosition(position: String) -> String {
