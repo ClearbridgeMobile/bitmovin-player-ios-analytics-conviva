@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Conviva/conviva-ios-sdk-spm.git",
       "state" : {
-        "revision" : "cbb9041f33ce32f6e622b6b2f4461adf5c46ffd7",
-        "version" : "4.0.40"
+        "revision" : "2c74305e44b97b9a657d162dcd862f8990bc7476",
+        "version" : "4.0.49"
       }
     },
     {
